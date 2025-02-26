@@ -24,7 +24,6 @@ def read_tasks():
             json.dump({}, f)
     with open(DB_PATH, 'r') as f:
         return json.load(f)
-
 # Запись задач в базу данных
 def write_tasks(data):
     with open(DB_PATH, 'w') as f:
