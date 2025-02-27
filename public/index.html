@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TaskMate Mini App</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        padding: 20px;
+      }
+      .task {
+        background: #fff;
+        margin: 10px 0;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Управление задачами</h1>
+    <input type="text" id="taskInput" placeholder="Введите задачу" />
+    <button onclick="addTask()">Добавить</button>
+
+    <div id="taskList"></div>
+
+    <script>
+      const API_URL = "https://your-replit-project.repl.co/api"; // Замените на ваш Replit URL
+
+      // Получение задач
+      async function fetchTasks() {
+        const userId = "123"; // Замените на реальный ID пользователя
+        const response = await fetch(`${API_URL}/tasks?user_id=${userId}`);
+        const tasks = await response.json();
+        renderTasks(tasks);
+      }
+
+      // Отображение задач
+      function renderTasks(tasks) {
+        const taskList = document.getElementById("taskList");
+        taskList.innerHTML = "";
+        tasks.forEach((task) => {
+          const taskDiv = document.createElement("div");
+          taskDiv.className = "task";
+          taskDiv.textContent = task.title;
+          taskList.appendChild(taskDiv);
+        });
+      }
+
+      // Добавление задачи
+      async function addTask() {
+        const taskInput = document.getElementById("taskInput");
+        const taskText = taskInput.value.trim();
+        if (!taskText) return;
+
+        const userId = "123"; // Замените на реальный ID пользователя
+        await fetch(`${API_URL}/tasks`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ user_id: userId, title: taskText }),
+        });
+        taskInput.value = "";
+        fetchTasks();
+      }
+
+      // Загрузка задач при старте
+      fetchTasks();
+    </script>
+  </body>
+</html>
